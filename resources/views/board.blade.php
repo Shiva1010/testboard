@@ -1,5 +1,6 @@
 <?php session_start();
 use App\Board;
+use App\Msg;
 
 $user = $_SESSION["user_name"];
 
@@ -47,15 +48,33 @@ $user = $_SESSION["user_name"];
 
         {{$end->content}}<br><br>
             <font size='1' color='#9D9D9D'>{$end->create_time}</font><br>
-            <form action = '../msg/store' method= 'POST'>
+
+            <form action = "../msg" method= "POST">
                 @csrf
                 <input type = 'hidden' name='board_id' value={{$end->id}}>
                 <input type = 'hidden' name='msg_user' value=$user >
                 <font size='2' color='#006400'>評論留言：</font><input type='text' name='msg'><br>
                 <input type='submit' name='submit' value='評論'>
             </form>
-            <br>";
+            <br>
 
+
+            <?php
+            $msgs_desc =msg::select()
+                ->orderBy('id','desc')
+                ->get();
+            ?>
+
+        @foreach( $msgs_desc as $msg_end)
+
+            <div style='border:3px #A3D1D1 ridge'	><font size='1' color='#7E3D76'>評論號：</font>{{$msg_end->id}}<br>
+                <font size='1' color='#7E3D76'>評論者：</font>{{$msg_end->msg_user}}<br>
+                <font size='1' color='#a9a9a9'>評論時間：{{$msg_end->create_time}}</font>
+                <br><br>
+                <font size='2' color='	#7E3D76'>評論內容</font><br>
+                <font size='1' color='black'>{{$msg_end->msg}}</font><br><br>
+
+        @endforeach
     @endforeach
 </div>
 

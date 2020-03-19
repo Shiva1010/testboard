@@ -45,7 +45,7 @@ Route::group(['middleware' => ['auth:suser']], function() {
 
 // 評論留言 MsgController
 // 寫評論
-    Route::post('/msg', 'MsgController@msg');
+    Route::post('/msg/store', 'MsgController@msg/store');
 
 
 // 回覆評論 ReMsgController

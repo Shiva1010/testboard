@@ -19,7 +19,6 @@ class CreateSusersTable extends Migration
             $table->string('password');
             $table->string('api_token')->unique();
             $table->timestamp('create_time');
-            $table->timestamps();
         });
     }
 

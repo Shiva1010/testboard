@@ -1,8 +1,10 @@
 <?php
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use App\Suser;
+use App\Msg;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Str;
@@ -16,19 +18,29 @@ use Carbon\Carbon;
 class SuserController extends Controller
 {
 
-    public function QQ(Request $request)
+    public function test()
     {
-        $value = $request->session()->get('key');
-        dd($value);
+        $getuser="試試看";
+
+//        echo $getuser;
+
+
+        return view('testqq',compact('getuser'));
     }
+
+
+
+
+
+
 
     public function store(Request $request)
     {
         // 確認是否有相同 account
-        $check_account =Suser::where('account', $request->account)->first();
+        $check_name =Suser::where('user_name', $request->user_name)->first();
 
         // 如果未註冊，則進入驗證資料是否符合格式跟創建會員資料
-        if($check_account == null) {
+        if($check_name == null) {
 
             $rules = [
                 'user_name' => ['required', 'string','max:30'],
@@ -58,17 +70,22 @@ class SuserController extends Controller
                     'api_token' => $api_token,
                     'create_time' => $create_time,
                 ]);
+//                if(!isset($_SESSION)) {
+//                    session_start();
+//                    $_SESSION['user_name'] = $request['user_name'];
+//                }
 
-                return response()->json([
-                    'msg' => '註冊成功',
-                    'create_date' => $create,
-                ]);
+                return view('user');
             }
 
         } else {
-            return response()->json(['msg' => '此帳戶已被註冊'],403);
+
+            echo "此帳戶已被註冊";
+//            return response()->json(['msg' => '此帳戶已被註冊'],403);
         }
     }
+
+
 
 
 }
