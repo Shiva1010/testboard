@@ -13,6 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+
+
+Route::get('/board', function () {
+    return view('board');
+});
+
+Route::post('/user', function () {
+    return view('user');
+});
+
+Route::post('/QQ','SuserController@QQ');
+
+
+Route::post('/register','SuserController@store');
+Route::post('/login','SuserController@login');

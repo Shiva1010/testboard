@@ -15,10 +15,11 @@ class CreateSusersTable extends Migration
     {
         Schema::create('susers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('user_name')->unique();
             $table->string('password');
             $table->string('api_token')->unique();
             $table->timestamp('create_time');
+            $table->timestamps();
         });
     }
 

@@ -14,7 +14,6 @@ class CreateGoodsTable extends Migration
     public function up()
     {
         Schema::create('goods', function (Blueprint $table) {
-            $table->id();
             $table->increments('id');
             $table->string('user_id');
             $table->string('user_name');
