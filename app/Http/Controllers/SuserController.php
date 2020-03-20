@@ -87,5 +87,68 @@ class SuserController extends Controller
 
 
 
+        public function login(Request $request)
+        {
+
+
+        $rules = [
+            'user_name' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'string', 'min:8', 'max:12'],
+        ];
+
+        $input = $request->all();
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+
+            return response()->json(['msg' => $validator->errors()],403);
+
+        } else {
+
+            $check_name = Suser::where('user_name', $request->user_name)->first();
+
+
+            if ($check_name == null) {
+
+                return response()->json(['msg' => '帳戶尚未註冊'],403);
+
+            } else {
+
+                // 從註冊名單內提取被 hash 的 password
+                $hash_password = $check_name->password;
+
+                $pwd = $request['password'];
+
+                // 將 $request 的 password 與 DB 內已被 hash 的 password 做 check
+                if (Hash::check($pwd, $hash_password)) {
+
+
+                    $api_token = Str::random(10);
+
+                    $check_name->update(['api_token' => $api_token]);
+
+                    $now_user = Suser::where('user_name', $request->user_name)->first();
+//
+                    session_start();
+                    $_SESSION['user_name'] = $request['user_name'];
+
+                    return redirect()->route("allboard");
+
+                } else {
+
+                    return response()->json(['msg' => '密碼錯誤'],403);
+
+                }
+
+            }
+
+
+        }
+
+    }
+
+
+
 
 }

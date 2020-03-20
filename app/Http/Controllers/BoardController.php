@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Suser;
 use App\Board;
 use App\Msg;
+use App\Remsg;
+use App\Good;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +17,76 @@ use Carbon\Carbon;
 
 class BoardController extends Controller
 {
+
+
+    public function allboard()
+    {
+        $boards_desc =Board::select()
+            ->orderBy('id','desc')
+            ->get();
+
+        $msgs_desc =Msg::select()
+            ->orderBy('id','desc')
+            ->get();
+
+        $remsg_desc = Remsg::select()
+            ->orderBy('id','desc')
+            ->get();
+
+
+
+        return view('board',compact('boards_desc','msgs_desc','remsg_desc'));
+
+
+    }
+
+    public function  allgood()
+    {
+//        $goods_board =
+
+    }
+
+    public function  good()
+    {
+        $board_id = $_POST['board_id'];
+        $user = $_POST['user'];
+        $create_time = Carbon::now();
+
+        $have_good = Good::
+            where ('user_name','=',$user)
+            ->where('boards_id','=',$board_id)
+            ->first();
+
+        $suser=Suser::where('user_name','=',$user)->first();
+        $user_id = $suser->id;
+//        dd($have_good);
+
+        if ($have_good == null){
+
+            Good::Create
+            ([
+                'user_id' => $user_id,
+                'boards_id' => $board_id,
+                'user_name' => $user,
+                'create_time' => $create_time,
+            ]);
+            echo  "按讚完成<br>";
+
+//            return view("board");
+
+        }else{
+
+            Good::where ('user_id','=',$user_id)
+                ->where('boards_id','=',$board_id)
+                ->delete();
+            echo  "收回讚<br>";
+
+//            return view("board");
+        }
+
+
+    }
+
     public function store()
     {
         if (isset($_POST["author"])) {
@@ -30,20 +103,10 @@ class BoardController extends Controller
             ]);
 
 
-            return view("board");
+            return redirect()->route("allboard");
         }
     }
 
-    public function allboard()
-    {
-        $boards_desc =Board::select()
-            ->orderBy('id','desc')
-            ->get();
-
-
-        return view("board",compact('boards_desc'));
-
-    }
 
     public function msg()
     {
@@ -63,20 +126,44 @@ class BoardController extends Controller
             ]);
 
 
-            return view("board");
+            return redirect()->route("allboard");
         }
     }
 
-    public function allmsg()
+    public function remsg()
     {
-        $msgs_desc =Msg::select()
-            ->orderBy('id','desc')
-            ->get();
+        if (isset($_POST["board_id"])) {
+
+            $board_id = $_POST["board_id"];
+            $msg_id = $_POST["msg_id"];
+            $remsg_user = $_POST["remsg_user"];
+            $remsg = $_POST["remsg"];
+            $create_time = Carbon::now();
+
+            Remsg::Create
+            ([
+                'boards_id' => $board_id,
+                'msg_id' => $msg_id,
+                'remsg_user' => $remsg_user,
+                'remsg' => $remsg,
+                'create_time' => $create_time,
+            ]);
 
 
-        return view("board",compact('msgs_desc'));
-
+            return redirect()->route("allboard");
+        }
     }
+
+//    public function allmsg()
+//    {
+//        $msgs_desc =Msg::select()
+//            ->orderBy('id','desc')
+//            ->get();
+//
+//
+//        return view("board",compact('msgs_desc'));
+//
+//    }
 
 
 
