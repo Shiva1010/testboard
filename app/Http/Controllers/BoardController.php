@@ -72,7 +72,7 @@ class BoardController extends Controller
             ]);
             echo  "按讚完成<br>";
 
-//            return view("board");
+//            return redirect()->route("allboard");
 
         }else{
 
@@ -81,7 +81,7 @@ class BoardController extends Controller
                 ->delete();
             echo  "收回讚<br>";
 
-//            return view("board");
+//            return redirect()->route("allboard");
         }
 
 

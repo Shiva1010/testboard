@@ -137,7 +137,9 @@ class SuserController extends Controller
 
                     } else {
 
-                        return response()->json(['msg' => '密碼錯誤'], 403);
+
+                        echo "密碼錯誤";
+//                        return response()->json(['msg' => '密碼錯誤'], 403);
 
                     }
 
