@@ -8,7 +8,7 @@ session_start();
 
 
 新增 User 成功 <br>
-<form action = '../board' method = 'POST'>
+<form action = '../totalboard' method = 'GET'>
     @csrf
     <input type='submit' name='submit' value='返回留言板'>
 </form>

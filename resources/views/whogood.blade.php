@@ -1,6 +1,6 @@
 <html>
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <body>
 
 <?php
@@ -27,7 +27,7 @@ if ($who_good != null) {
 ?>
 
 
-<form action='../allboard' method='get'>
+<form action='../totalboard' method='get'>
     @csrf
     <input type='submit' value='返回留言板'>
 </form>

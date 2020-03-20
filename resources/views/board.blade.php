@@ -39,8 +39,14 @@ $user = $_SESSION["user_name"];
 
 <div class="links">
     <a href="http://localhost:8000/">返回首頁</a>
-</div>
 
+</div>
+<div style="padding:10px">
+<form action="../suser/logout" method="POST">
+    @csrf
+    <input type="submit" name="submit" value="登出"><br>
+</form>
+</div>
 
 <div style="text-align: center">
     <font size='6' color='#02C88b'>Shiva の 留言板</font><br><br>
