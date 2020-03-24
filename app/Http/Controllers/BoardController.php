@@ -34,7 +34,30 @@ class BoardController extends Controller
             ->get();
 
 
-
+////
+//        foreach ($boards_desc as $end )
+//        {
+//
+//            foreach ($msgs_desc as $msg_end){
+//                if ($end->id != $msg_end->boards_id){
+//                    continue;
+//                }
+//
+//                foreach ($remsg_desc as $remsg_end){
+//                    if ($msg_end->id != $remsg_end->msg_id){
+//                        continue;
+//                    }
+//
+//            }
+//        }
+//
+//        return ([
+//            $endid=$end->id,
+//            $endauthor=$end->author,
+//            $endcontent=$end->content,
+//            $endcreatetime=$end->create_time,
+//        ]);
+//        return response()->json(["endid"=>$endid,"endauthor"=>$endauthor,"endcontenct"=>$endcontent,"endcreatetime"=>$endcreatetime]);
         return view('board',compact('boards_desc','msgs_desc','remsg_desc'));
 
 
@@ -45,23 +68,15 @@ class BoardController extends Controller
     public function all(){
 
         $all = Board::orderBy('id','desc')
-
+            ->withcount('goods')
+            ->with('goods')
             ->with(['msgs' => function($query){
-
-                $query->with(['remsgs'
-
-                =>function($query){
-
+                $query->with(['remsgs' =>function($query){
                     $query->orderBy('id','desc');
-
             }])->orderBy('id','desc');
-
         }])->get();
 
-
-
         return response()->json(["all"=>$all]);
-
     }
 
     public function  allgood()
@@ -96,7 +111,7 @@ class BoardController extends Controller
             ]);
             echo  "按讚完成<br>";
 
-//            return redirect()->route("allboard");
+            return redirect()->route("allboard");
 
         }else{
 
@@ -105,11 +120,36 @@ class BoardController extends Controller
                 ->delete();
             echo  "收回讚<br>";
 
-//            return redirect()->route("allboard");
+            return redirect()->route("allboard");
         }
 
 
     }
+
+    public function whogood()
+    {
+        session_start();
+
+        $board_id = $_POST['board_id'];
+
+        $who_good = Good::where('boards_id','=',$board_id)->get();
+
+        if ($who_good != null) {
+
+            return view('whogood',compact('who_good'));
+//            foreach ($who_good as $who_end) {
+//
+//                $who_user_name = $who_end -> user_name;
+//                $who_user_id = $who_end -> user_id;
+//                echo "$who_user_id "," $who_user_name<br>";
+//
+//            }
+        }else{
+            echo "目前無人按讚";
+        }
+
+    }
+
 
     public function store()
     {
