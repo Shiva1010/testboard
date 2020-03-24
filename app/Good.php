@@ -18,4 +18,8 @@ class Good extends Model
     protected $hidden=[
         'password',
     ];
+
+    public function board(){
+        return $this->belongsTo('Board::class','id');
+    }
 }

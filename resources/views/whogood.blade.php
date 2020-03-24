@@ -10,17 +10,19 @@ use App\Good;
 $board_id = $_POST['board_id'];
 
 
-$who_good = Good::where('boards_id','=',$board_id)->get();
+$who_good = Good::where('boards_id','=',$board_id)->select("id","user_name")->get();
 
 if ($who_good != null) {
 
-    foreach ($who_good as $who_end) {
+  echo "$who_good";
 
-        $who_user_name = $who_end -> user_name;
-        $who_user_id = $who_end -> user_id;
-        echo "$who_user_id "," $who_user_name<br>";
-
-    }
+//    foreach ($who_good as $who_end) {
+//
+//        $who_user_name = $who_end -> user_name;
+//        $who_user_id = $who_end -> user_id;
+//        echo "$who_user_id "," $who_user_name<br>";
+//
+//    }
 }else{
     echo "目前無人按讚";
 }

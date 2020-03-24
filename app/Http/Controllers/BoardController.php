@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 use App\Suser;
@@ -34,30 +35,6 @@ class BoardController extends Controller
             ->get();
 
 
-////
-//        foreach ($boards_desc as $end )
-//        {
-//
-//            foreach ($msgs_desc as $msg_end){
-//                if ($end->id != $msg_end->boards_id){
-//                    continue;
-//                }
-//
-//                foreach ($remsg_desc as $remsg_end){
-//                    if ($msg_end->id != $remsg_end->msg_id){
-//                        continue;
-//                    }
-//
-//            }
-//        }
-//
-//        return ([
-//            $endid=$end->id,
-//            $endauthor=$end->author,
-//            $endcontent=$end->content,
-//            $endcreatetime=$end->create_time,
-//        ]);
-//        return response()->json(["endid"=>$endid,"endauthor"=>$endauthor,"endcontenct"=>$endcontent,"endcreatetime"=>$endcreatetime]);
         return view('board',compact('boards_desc','msgs_desc','remsg_desc'));
 
 
@@ -102,24 +79,25 @@ class BoardController extends Controller
 
         if ($have_good == null){
 
-            Good::Create
+            $dogoood=Good::Create
             ([
                 'user_id' => $user_id,
                 'boards_id' => $board_id,
                 'user_name' => $user,
                 'create_time' => $create_time,
             ]);
-            echo  "按讚完成<br>";
-
+//            echo  "按讚完成<br>";
+//            return response()->json(["info" => "按讚完成","action" =>$dogoood]);
             return redirect()->route("allboard");
 
         }else{
 
-            Good::where ('user_id','=',$user_id)
+            $nogoood=Good::where ('user_id','=',$user_id)
                 ->where('boards_id','=',$board_id)
                 ->delete();
             echo  "收回讚<br>";
 
+//            return response()->json(["info" => "收回讚","action" =>$nogoood]);
             return redirect()->route("allboard");
         }
 

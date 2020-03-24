@@ -80,7 +80,7 @@ $user = $_SESSION["user_name"];
 
 
 {{--<!--                --><?php--}}
-{{--                $goods_board = $end->id;--}}
+{{--                $goods_board = "$end->id";--}}
 {{--                $count_good =Good::where('boards_id','=',$goods_board)->count();--}}
 {{--                ?>--}}
 

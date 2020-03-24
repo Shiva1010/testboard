@@ -20,6 +20,9 @@ class Board extends Model
         return $this->hasMany(Msg::class,'boards_id');
     }
 
-
+    public function goods()
+    {
+        return $this->hasMany(Good::class,'boards_id');
+    }
 
 }
