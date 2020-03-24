@@ -14,4 +14,12 @@ class Board extends Model
         'author','content','create_time'
     ];
 
+
+    public function msgs()
+    {
+        return $this->hasMany(Msg::class,'boards_id');
+    }
+
+
+
 }

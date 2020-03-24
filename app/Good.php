@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Good extends Authenticatable
+class Good extends Model
 {
     use Notifiable;
     public $timestamps = false;

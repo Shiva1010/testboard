@@ -40,6 +40,30 @@ class BoardController extends Controller
 
     }
 
+
+    //  顯示所有留言、評論、回覆，依新到舊排序
+    public function all(){
+
+        $all = Board::orderBy('id','desc')
+
+            ->with(['msgs' => function($query){
+
+                $query->with(['remsgs'
+
+                =>function($query){
+
+                    $query->orderBy('id','desc');
+
+            }])->orderBy('id','desc');
+
+        }])->get();
+
+
+
+        return response()->json(["all"=>$all]);
+
+    }
+
     public function  allgood()
     {
 //        $goods_board =

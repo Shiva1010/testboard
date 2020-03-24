@@ -94,4 +94,5 @@ Route::post('/suser/logout','SuserController@logout');
 
 
 
+Route::get('/all','BoardController@all');
 
