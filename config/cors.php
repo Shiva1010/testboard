@@ -1,5 +1,7 @@
 <?php
 
+//$app->configure('cors');
+
 return [
 
     /*

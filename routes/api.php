@@ -26,6 +26,8 @@ Route::post('/frontlogin','SuserController@frontlogin');
 // 查看留言
 Route::get('/frontall', 'BoardController@frontall');
 
+//Route::get('/fronttime', 'BoardController@fronttime');
+
 
 Route::group(['middleware' => ['auth:suser']], function() {
 // 留言版  BoardController
