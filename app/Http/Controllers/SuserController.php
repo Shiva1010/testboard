@@ -279,7 +279,7 @@ class SuserController extends Controller
 
 
         $check_name = Suser::where('user_name', $request->user_name)->first();
-        $api_token = "";
+        $api_token = Str::random(10);
 
         $check_name->update(['api_token' => $api_token]);
 
