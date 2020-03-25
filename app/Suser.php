@@ -10,6 +10,7 @@ class Suser extends Authenticatable
 {
     use Notifiable;
     public $timestamps = false;
+//    protected $guarded = [];
 
     protected  $fillable=[
         'user_name','password','api_token','create_time'

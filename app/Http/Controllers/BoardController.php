@@ -10,10 +10,10 @@ use App\Board;
 use App\Msg;
 use App\Remsg;
 use App\Good;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Hash;
+//use Illuminate\Support\Facades\Validator;
+//use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class BoardController extends Controller
@@ -40,21 +40,6 @@ class BoardController extends Controller
 
     }
 
-
-    //  顯示所有留言、評論、回覆，依新到舊排序
-    public function all(){
-
-        $all = Board::orderBy('id','desc')
-            ->withcount('goods')
-            ->with('goods')
-            ->with(['msgs' => function($query){
-                $query->with(['remsgs' =>function($query){
-                    $query->orderBy('id','desc');
-            }])->orderBy('id','desc');
-        }])->get();
-
-        return response()->json(["all"=>$all]);
-    }
 
     public function  allgood()
     {
@@ -111,9 +96,13 @@ class BoardController extends Controller
         $board_id = $_POST['board_id'];
 
         $who_good = Good::where('boards_id','=',$board_id)->get();
+//        $who_good = Good::where('board_id','=',$board_id)
+//            ->select('user_name')
+//            ->get();
 
         if ($who_good != null) {
 
+//            return response()->json(["info" => "此篇留言的讚者" , "whogood" => $who_good]);
             return view('whogood',compact('who_good'));
 //            foreach ($who_good as $who_end) {
 //
@@ -137,14 +126,14 @@ class BoardController extends Controller
             $content = $_POST["content"];
             $create_time = Carbon::now();
 
-            Board::Create
+            $Board=Board::Create
             ([
                 'author' => $author,
                 'content' => $content,
                 'create_time' => $create_time,
             ]);
 
-
+//            return response()->json(["info" => "新增一筆留言" , "Board" => $Board]);
             return redirect()->route("allboard");
         }
     }
@@ -159,7 +148,7 @@ class BoardController extends Controller
             $msg = $_POST["msg"];
             $create_time = Carbon::now();
 
-            Msg::Create
+            $msg=Msg::Create
             ([
                 'boards_id' => $board_id,
                 'msg_user' => $msg_user,
@@ -168,6 +157,7 @@ class BoardController extends Controller
             ]);
 
 
+//            return response()->json(["info" => "新增一筆評論" , "msg" => $msg]);
             return redirect()->route("allboard");
         }
     }
@@ -182,7 +172,7 @@ class BoardController extends Controller
             $remsg = $_POST["remsg"];
             $create_time = Carbon::now();
 
-            Remsg::Create
+            $remsg=Remsg::Create
             ([
                 'boards_id' => $board_id,
                 'msg_id' => $msg_id,
@@ -192,21 +182,140 @@ class BoardController extends Controller
             ]);
 
 
+//            return response()->json(["info" => "新增一筆回覆" , "remsg" => $remsg]);
             return redirect()->route("allboard");
         }
     }
 
-//    public function allmsg()
-//    {
-//        $msgs_desc =Msg::select()
-//            ->orderBy('id','desc')
-//            ->get();
-//
-//
-//        return view("board",compact('msgs_desc'));
-//
-//    }
 
+    public function frontboard(Request $request)
+    {
+
+
+            $author = $request["author"];
+            $content = $request["content"];
+            $create_time = Carbon::now();
+
+            $Board=Board::Create
+            ([
+                'author' => $author,
+                'content' => $content,
+                'create_time' => $create_time,
+            ]);
+
+            return response()->json(["info" => "新增一筆留言" , "Board" => $Board]);
+    }
+
+
+    public function frontmsg()
+    {
+
+
+            $board_id = $_POST["board_id"];
+            $msg_user = $_POST["msg_user"];
+            $msg = $_POST["msg"];
+            $create_time = Carbon::now();
+
+            $msg=Msg::Create
+            ([
+                'boards_id' => $board_id,
+                'msg_user' => $msg_user,
+                'msg' => $msg,
+                'create_time' => $create_time,
+            ]);
+
+
+            return response()->json(["info" => "新增一筆評論" , "msg" => $msg]);
+    }
+
+    public function frontremsg(Request $request)
+    {
+
+            $board_id = $request["board_id"];
+            $msg_id = $request["msg_id"];
+            $remsg_user = $request["remsg_user"];
+            $remsg = $request["remsg"];
+            $create_time = Carbon::now();
+
+            $remsg=Remsg::Create
+            ([
+                'boards_id' => $board_id,
+                'msg_id' => $msg_id,
+                'remsg_user' => $remsg_user,
+                'remsg' => $remsg,
+                'create_time' => $create_time,
+            ]);
+
+
+            return response()->json(["info" => "新增一筆回覆" , "remsg" => $remsg]);
+    }
+
+    //  顯示所有留言、評論、回覆，依新到舊排序
+    public function frontall()
+    {
+        $all = Board::orderBy('id','desc')
+            ->withcount('goods')
+            ->with('goods')
+            ->withcount('msgs')
+            ->with(['msgs' => function($query){
+                $query->with(['remsgs' =>function($query){
+                    $query->orderBy('id','desc');
+                }])->orderBy('id','desc');
+            }])->get();
+
+        return response()->json(["all"=>$all]);
+    }
+
+    public function  frontgood(Request $request)
+    {
+        $board_id = $request['board_id'];
+        $user_name = $request['user_name'];
+        $create_time = Carbon::now();
+
+        $have_good = Good::
+        where ('user_name','=',$user_name)
+            ->where('boards_id','=',$board_id)
+            ->first();
+
+        $suser=Suser::where('user_name','=',$user_name)->first();
+        $user_id = $suser->id;
+
+        if ($have_good == null){
+
+            $dogoood=Good::Create
+            ([
+                'user_id' => $user_id,
+                'boards_id' => $board_id,
+                'user_name' => $user_name,
+                'create_time' => $create_time,
+            ]);
+            return response()->json(["info" => "按讚完成","action" =>$dogoood]);
+
+        }else{
+
+            Good::where ('user_id','=',$user_id)
+                ->where('boards_id','=',$board_id)
+                ->delete();
+
+            return response()->json(["info" => "收回讚"]);
+        }
+
+
+    }
+
+    public function frontwhogood(Request $request)
+    {
+
+        $board_id = $request['board_id'];
+
+
+        $who_good = Good::where('boards_id','=',$board_id)
+            ->select('user_name')
+            ->get();
+
+            return response()->json(["info" => "目前此篇留言的讚者" , "whogood" => $who_good]);
+
+    }
 
 
 }

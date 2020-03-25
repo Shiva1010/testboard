@@ -49,7 +49,7 @@ return [
 
         'suser' => [
             'driver' => 'token',
-            'procider' => 'suser',
+            'provider' => 'susers',
             'hash' => false,
         ],
     ],
@@ -76,9 +76,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
-        'suser' =>[
+        'susers' =>[
             'driver' => 'eloquent',
-            'madel' => App\Suser::class,
+            'model' => App\Suser::class,
         ],
         // 'users' => [
         //     'driver' => 'database',
