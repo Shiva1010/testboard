@@ -207,14 +207,14 @@ class BoardController extends Controller
     }
 
 
-    public function frontmsg()
+    public function frontmsg(Request $request)
     {
 
 
-            $board_id = $_POST["board_id"];
-            $msg_user = $_POST["msg_user"];
-            $msg = $_POST["msg"];
-            $create_time = Carbon::now();
+        $board_id = $request["board_id"];
+        $msg_user = $request["msg_user"];
+        $msg = $request["msg"];
+        $create_time = Carbon::now();
 
             $msg=Msg::Create
             ([
