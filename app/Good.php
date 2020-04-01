@@ -19,6 +19,7 @@ class Good extends Model
         'password',
     ];
 
+//    SOJ: related 寫法沒有一致
     public function board(){
         return $this->belongsTo('Board::class','id');
     }

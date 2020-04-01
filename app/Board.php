@@ -18,6 +18,8 @@ class Board extends Model
     public function msgs()
     {
         return $this->hasMany(Msg::class,'boards_id');
+//        SOJ: 更優雅的寫法
+//        return $this->hasMany(Msg::class,'boards_id')->with('remsgs');
     }
 
     public function goods()

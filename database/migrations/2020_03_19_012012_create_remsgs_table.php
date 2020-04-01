@@ -15,9 +15,9 @@ class CreateRemsgsTable extends Migration
     {
         Schema::create('remsgs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('boards_id');
+//            $table->integer('boards_id');
             $table->integer('msg_id');
-            $table->string('remsg_user');
+            $table->string('remsg_user'); //suser_id
             $table->string('remsg');
             $table->timestamp('create_time');
         });

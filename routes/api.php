@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//SOJ: URI path 已經前綴 /api，實在不需要另外加 front, 可以 web 共用同一個 controller
 // 使用者 SuserController
 // 註冊
 Route::post('/frontstore','SuserController@frontstore');
@@ -40,7 +41,9 @@ Route::group(['middleware' => ['auth:suser']], function() {
 // 按讚跟收回讚
     Route::post('/frontgood', 'BoardController@frontgood');
 // 查看讚者
+//    SOJ: 不應該用 post，可以試著從 URI 帶 id， model binding
     Route::post('/frontwhogood', 'BoardController@frontwhogood');
+    Route::get('/frontwhogood/{board}', 'BoardController@frontwhogood');
 // 登出
     Route::post('/frontlogout', 'SuserController@frontlogout');
 
