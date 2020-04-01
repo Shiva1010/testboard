@@ -16,7 +16,7 @@ class CreateGoodsTable extends Migration
         Schema::create('goods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
-            $table->string('user_name');
+//            $table->string('user_name');
             $table->integer('boards_id');
             $table->timestamp('create_time');
         });

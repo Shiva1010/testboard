@@ -19,4 +19,9 @@ class Remsg extends Model
         return $this->belongsTo(Msg::class,'id');
     }
 
+//    public function user()
+//    {
+//        return $this->belongsTo(Suser::class, 'suser_id');
+//    }
+//
 }

@@ -64,6 +64,7 @@ class BoardController extends Controller
 
         if ($have_good == null){
 
+//            SOJ: Create method 不應該是大寫
             $dogoood=Good::Create
             ([
                 'user_id' => $user_id,
@@ -191,11 +192,15 @@ class BoardController extends Controller
     public function frontboard(Request $request)
     {
 
+        //SOJ: 沒有 Validator
 
+        //SOJ: 為什麼要帶 author, 變數沒複用, 縮排錯誤
+//        dd(auth()->user()->user_name); //suser
             $author = $request["author"];
             $content = $request["content"];
             $create_time = Carbon::now();
 
+        //SOJ: 左括號、左中括號不符合 psr 規範
             $Board=Board::Create
             ([
                 'author' => $author,
@@ -209,14 +214,15 @@ class BoardController extends Controller
 
     public function frontmsg(Request $request)
     {
+        //SOJ: 沒有 validator
 
-
+        //SOJ: 為什麼要另外帶 msg_user
         $board_id = $request["board_id"];
         $msg_user = $request["msg_user"];
         $msg = $request["msg"];
         $create_time = Carbon::now();
 
-            $msg=Msg::Create
+            $msg = Msg::Create
             ([
                 'boards_id' => $board_id,
                 'msg_user' => $msg_user,
@@ -230,7 +236,7 @@ class BoardController extends Controller
 
     public function frontremsg(Request $request)
     {
-
+            //SOJ: 同 method frontmsg
             $board_id = $request["board_id"];
             $msg_id = $request["msg_id"];
             $remsg_user = $request["remsg_user"];
@@ -253,6 +259,12 @@ class BoardController extends Controller
     //  顯示所有留言、評論、回覆，依新到舊排序
     public function frontall()
     {
+//        SOJ: 更優雅的寫法
+//        $all = Board::orderBy('id','desc')
+//            ->withcount('goods')
+//            ->with('goods')
+//            ->withcount('msgs')
+//            ->with(['msgs'])->get();
         $all = Board::orderBy('id','desc')
             ->withcount('goods')
             ->with('goods')
@@ -304,7 +316,13 @@ class BoardController extends Controller
     }
 
     public function frontwhogood(Request $request)
+//    public function frontwhogood(Request $request, Board $board)
+//    public function frontwhogood(Request $request, $id)
     {
+
+        //SOJ: 更優雅的寫法, 透過 URI 的 model binding 可以直接取得 board 的 model，在去關聯 goods table
+//        $likes = $board->goods()->get();
+//        dd($likes[0]->user_name);
 
         $board_id = $request['board_id'];
 
